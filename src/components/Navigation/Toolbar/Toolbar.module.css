@@ -13,6 +13,14 @@
   z-index: 90;
 }
 
+.DrawerToggle {
+  cursor: pointer;
+}
+
+.DrawerToggle :hover {
+  font-weight: 700;
+}
+
 .Toolbar nav {
   height: 100%;
 }
