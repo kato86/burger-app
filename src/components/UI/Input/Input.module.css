@@ -30,3 +30,8 @@
   border: 2px solid orangered;
   background-color: rgb(255, 163, 130);
 }
+
+.Error {
+  color: red;
+  font-size: 12px;
+}
