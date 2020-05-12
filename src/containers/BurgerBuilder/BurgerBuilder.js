@@ -13,7 +13,7 @@ const INGEDIENT_PRICES = {
   salad: 0.5,
   cheese: 0.4,
   meat: 1.3,
-  bacon: 0.7
+  bacon: 0.7,
 };
 
 class BurgerBuilder extends Component {
@@ -23,23 +23,23 @@ class BurgerBuilder extends Component {
     purchasable: false,
     purchasing: false,
     loading: false,
-    error: false
+    error: false,
   };
 
   componentDidMount() {
-    axios
-      .get("https://react-my-burger-3f3e0.firebaseio.com/ingredients.json")
-      .then(respone => {
-        this.setState({ ingredients: respone.data });
-      })
-      .catch(error => {
-        this.setState({ error: true });
-      });
+    // axios
+    //   .get("https://react-my-burger-3f3e0.firebaseio.com/ingredients.json")
+    //   .then(respone => {
+    //     this.setState({ ingredients: respone.data });
+    //   })
+    //   .catch(error => {
+    //     this.setState({ error: true });
+    //   });
   }
 
   updatePurchaseState(ingredients) {
     const sum = Object.keys(ingredients)
-      .map(igKey => {
+      .map((igKey) => {
         return ingredients[igKey];
       })
       .reduce((sum, el) => {
@@ -48,11 +48,11 @@ class BurgerBuilder extends Component {
     this.setState({ purchasable: sum > 0 });
   }
 
-  addIngredientHandler = type => {
+  addIngredientHandler = (type) => {
     const oldCount = this.state.ingredients[type];
     const updateCount = oldCount + 1;
     const updatedIngredient = {
-      ...this.state.ingredients
+      ...this.state.ingredients,
     };
     updatedIngredient[type] = updateCount;
     const priceAddition = INGEDIENT_PRICES[type];
@@ -62,14 +62,14 @@ class BurgerBuilder extends Component {
     this.updatePurchaseState(updatedIngredient);
   };
 
-  removeIngredientHandler = type => {
+  removeIngredientHandler = (type) => {
     const oldCount = this.state.ingredients[type];
     if (oldCount <= 0) {
       return;
     }
     const updateCount = oldCount - 1;
     const updatedIngredient = {
-      ...this.state.ingredients
+      ...this.state.ingredients,
     };
     updatedIngredient[type] = updateCount;
     const priceDeduction = INGEDIENT_PRICES[type];
@@ -101,13 +101,13 @@ class BurgerBuilder extends Component {
 
     this.props.history.push({
       pathname: "/checkout",
-      search: "?" + queryString
+      search: "?" + queryString,
     });
   };
 
   render() {
     const disabledInfo = {
-      ...this.state.ingredients
+      ...this.state.ingredients,
     };
     for (let key in disabledInfo) {
       disabledInfo[key] = disabledInfo[key] <= 0;
