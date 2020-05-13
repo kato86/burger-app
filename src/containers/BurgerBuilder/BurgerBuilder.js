@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 
 import Aux from "../../hoc/Auxiliary/Auxiliary";
 import Burger from "../../components/Burger/Burger";
@@ -8,6 +9,7 @@ import OrderSummary from "../../components/Burger/OrderSummary/OrderSummary";
 import axios from "../../axios-orders";
 import Spinner from "../../components/UI/Spinner/Spinner";
 import withErrorHandler from "../../hoc/withErrorHandler/withErrorHandler";
+import * as actionTypes from "../../store/actions";
 
 const INGEDIENT_PRICES = {
   salad: 0.5,
@@ -18,7 +20,7 @@ const INGEDIENT_PRICES = {
 
 class BurgerBuilder extends Component {
   state = {
-    ingredients: null,
+    // ingredients: null,
     totalPrice: 4,
     purchasable: false,
     purchasing: false,
@@ -158,5 +160,23 @@ class BurgerBuilder extends Component {
     );
   }
 }
+
+const mapStateToProps = (state) => {
+  return {
+    ingredients: state.ingredients,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    onIngredientAdded: (ingName) =>
+      dispatch({ type: actionTypes.ADD_INGREDIENT, ingredientName: ingName }),
+    onIngredientRemoved: (ingName) =>
+      dispatch({
+        type: actionTypes.REMOVE_INGREDIENT,
+        ingredientName: ingName,
+      }),
+  };
+};
 
 export default withErrorHandler(BurgerBuilder, axios);
