@@ -20,7 +20,6 @@ const INGEDIENT_PRICES = {
 
 class BurgerBuilder extends Component {
   state = {
-    // ingredients: null,
     totalPrice: 4,
     purchasable: false,
     purchasing: false,
@@ -109,7 +108,7 @@ class BurgerBuilder extends Component {
 
   render() {
     const disabledInfo = {
-      ...this.state.ingredients,
+      ...this.props.ings,
     };
     for (let key in disabledInfo) {
       disabledInfo[key] = disabledInfo[key] <= 0;
@@ -121,13 +120,13 @@ class BurgerBuilder extends Component {
       <Spinner />
     );
 
-    if (this.state.ingredients) {
+    if (this.props.ings) {
       burger = (
         <Aux>
-          <Burger ingredients={this.state.ingredients} />
+          <Burger ingredients={this.props.ings} />
           <BuildControls
-            ingredientAdded={this.addIngredientHandler}
-            ingredientRemoved={this.removeIngredientHandler}
+            ingredientAdded={this.props.onIngredientAdded}
+            ingredientRemoved={this.props.onIngredientRemoved}
             disabled={disabledInfo}
             purchasable={this.state.purchasable}
             ordered={this.purchaseHandler}
@@ -137,7 +136,7 @@ class BurgerBuilder extends Component {
       );
       orderSummary = (
         <OrderSummary
-          ingredients={this.state.ingredients}
+          ingredients={this.props.ings}
           purchaseContinued={this.purchaseContinueHandler}
           purchaseCancelled={this.purchaseCancelHandler}
           price={this.state.totalPrice}
@@ -163,7 +162,7 @@ class BurgerBuilder extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    ingredients: state.ingredients,
+    ings: state.ingredients,
   };
 };
 
@@ -179,4 +178,7 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default withErrorHandler(BurgerBuilder, axios);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withErrorHandler(BurgerBuilder, axios));
