@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import axios from "../../../axios-orders";
+import { connect } from "react-redux";
 
 import Button from "../../../components/UI/Button/Button";
 import Spinner from "../../../components/UI/Spinner/Spinner";
@@ -11,34 +12,34 @@ class ContactData extends Component {
     email: "",
     address: {
       street: "",
-      postalCode: ""
-    }
+      postalCode: "",
+    },
   };
 
-  orderHandler = event => {
+  orderHandler = (event) => {
     event.preventDefault();
     this.setState({ loading: true });
     const order = {
-      ingredients: this.props.ingredients,
+      ingredients: this.props.ings,
       price: this.props.price,
       customer: {
         name: "Kamil Tomala",
         address: {
           street: "Test 1",
           zipCode: "12-345",
-          country: "Poland"
+          country: "Poland",
         },
-        email: "test@test.com"
+        email: "test@test.com",
       },
-      deliveryMethod: "fastest"
+      deliveryMethod: "fastest",
     };
     axios
       .post("/orders.json", order)
-      .then(response => {
+      .then((response) => {
         this.setState({ loading: false });
         this.props.history.push("/");
       })
-      .catch(error => {
+      .catch((error) => {
         this.setState({ loading: false });
       });
   };
@@ -87,4 +88,11 @@ class ContactData extends Component {
   }
 }
 
-export default ContactData;
+const mapStateToProps = (state) => {
+  return {
+    ings: state.ingredients,
+    price: state.totalPrice,
+  };
+};
+
+export default connect(mapStateToProps)(ContactData);
