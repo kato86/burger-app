@@ -96,8 +96,29 @@ class ContactData extends Component {
     formIsValid: false,
   };
 
+  orderHandler = (event) => {
+    event.preventDefault();
+    const formData = {};
+    for (let formElementIdentifier in this.state.orderForm) {
+      formData[formElementIdentifier] = this.state.orderForm[
+        formElementIdentifier
+      ].value;
+    }
+    const order = {
+      ingredients: this.props.ings,
+      price: this.props.price,
+      orderData: formData,
+    };
+
+    this.props.onOrderBurger(order);
+  };
+
   checkValidity(value, rules) {
     let isValid = true;
+
+    if (!rules) {
+      return true;
+    }
 
     if (rules.required) {
       isValid = value.trim() !== "" && isValid;
@@ -111,6 +132,11 @@ class ContactData extends Component {
       isValid = value.length <= rules.maxLength && isValid;
     }
 
+    if (rules.isEmail) {
+      const pattern = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/;
+      isValid = pattern.test(value) && isValid;
+    }
+
     if (rules.isNumeric) {
       const pattern = /^\d+$/;
       isValid = pattern.test(value) && isValid;
@@ -118,23 +144,6 @@ class ContactData extends Component {
 
     return isValid;
   }
-
-  orderHandler = (event) => {
-    event.preventDefault();
-    const formData = {};
-    for (let formElementIdentifier in this.state.orderForm) {
-      formData[formElementIdentifier] = this.state.orderForm[
-        formElementIdentifier
-      ].value;
-    }
-    const order = {
-      ingredients: this.props.ingredients,
-      price: this.props.price,
-      orderData: formData,
-    };
-
-    this.props.onOrderBurger(order);
-  };
 
   inputChangedHandler = (event, inputIdentifier) => {
     const updatedOrderForm = {
@@ -182,11 +191,7 @@ class ContactData extends Component {
             changed={(event) => this.inputChangedHandler(event, formElement.id)}
           />
         ))}
-        <Button
-          btnType="Success"
-          disabled={!this.state.formIsValid}
-          clicked={this.orderHandler}
-        >
+        <Button btnType="Success" disabled={!this.state.formIsValid}>
           ORDER
         </Button>
       </form>
