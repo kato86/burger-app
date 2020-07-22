@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { Redirect } from "react-router-dom";
 
 import Input from "../../components/UI/Input/Input";
 import Button from "../../components/UI/Button/Button";
@@ -131,7 +132,7 @@ class Auth extends Component {
       />
     ));
 
-    if (this.props.loading === true) {
+    if (this.props.loading) {
       form = <Spinner />;
     }
 
